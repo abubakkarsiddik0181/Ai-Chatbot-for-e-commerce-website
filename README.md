@@ -13,18 +13,6 @@ and persistent memory, all wired together.
 
 ---
 
-## What's in this repo
-
-```
-├── index.html                          # Full storefront (HTML/CSS/JS, single file)
-├── n8n-workflow/
-│   ├── bazaar91-chatbot-workflow.json  # Importable n8n workflow
-│   └── system-prompt.md                # Standalone copy of the agent's system prompt
-└── README.md
-```
-
----
-
 ## Frontend
 
 - **Stack:** Vanilla HTML / CSS / JavaScript — no build step, no framework, one file.
