@@ -10,7 +10,7 @@ and persistent memory, all wired together.
 
 ---
 
-## 🔗 What's in this repo
+## What's in this repo
 
 ```
 ├── index.html                          # Full storefront (HTML/CSS/JS, single file)
@@ -22,7 +22,7 @@ and persistent memory, all wired together.
 
 ---
 
-## 🖥️ Frontend
+## Frontend
 
 - **Stack:** Vanilla HTML / CSS / JavaScript — no build step, no framework, one file.
 - **Features:** product catalogue with category filter + live search, cart drawer,
@@ -35,7 +35,7 @@ and persistent memory, all wired together.
   re-themed from scratch with CSS variables so it matches the rest of the site
   instead of looking like a bolted-on widget.
 
-## 🤖 AI Agent Workflow (n8n)
+## AI Agent Workflow (n8n)
 
 ```
 Chat Trigger  →  AI Agent ("Bristi")
@@ -60,7 +60,7 @@ Chat Trigger  →  AI Agent ("Bristi")
   (persona grounding, tool-first enforcement, bilingual matching, few-shot
   examples, data-leak guardrails).
 
-## 🛠️ Setup / Import Instructions
+## Setup / Import Instructions
 
 1. **Frontend:** open `index.html` directly, or host it anywhere static
    (GitHub Pages, Netlify, etc.).
@@ -80,13 +80,13 @@ Chat Trigger  →  AI Agent ("Bristi")
    ```
    with your own webhook URL.
 
-   ⚠️ **Don't commit a real, live webhook URL to a public repo.** Anyone
+   **Don't commit a real, live webhook URL to a public repo.** Anyone
    reading the source could call your workflow directly and run up your
    LLM/API usage. Keep it as a placeholder here, and only wire in the real
    URL on your deployed/private copy — or add rate-limiting on the n8n side
    if you do expose a live demo.
 
-## 📌 Possible next steps (noted here to show scalability awareness)
+## Possible next steps (noted here to show scalability awareness)
 
 - The Supabase tool currently uses `getAll` with `returnAll: true` — fine for
   a small catalogue, but at scale this should move to filtered queries or a
@@ -95,7 +95,7 @@ Chat Trigger  →  AI Agent ("Bristi")
 - Add a lightweight admin view for order confirmations instead of relying on
   the agent to just relay order details to a human dispatcher.
 
-## 🧰 Tech Stack
+## Tech Stack
 
 `n8n` · `n8n AI Agent / LangChain nodes` · `OpenRouter (DeepSeek)` ·
 `Supabase (Postgres)` · `Postgres Chat Memory` · `@n8n/chat` ·
