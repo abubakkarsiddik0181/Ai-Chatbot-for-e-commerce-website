@@ -1,4 +1,7 @@
 # Bazaar91 — E-commerce Site with an AI Shopping Assistant
+<img width="1158" height="574" alt="Screenshot_1" src="https://github.com/user-attachments/assets/5703396d-6d43-41a4-a039-67b8f3d82ef2" />
+<img width="1335" height="762" alt="Screenshot_2" src="https://github.com/user-attachments/assets/95c820d0-0730-43d4-a3dd-126f67182f05" />
+<img width="1333" height="750" alt="Screenshot_3" src="https://github.com/user-attachments/assets/939c7ffa-eece-4521-9162-4c745bd54106" />
 
 A demo e-commerce storefront (Bazaar91, Bangladesh) with a fully custom-themed,
 AI-powered chatbot ("Bristi") embedded via n8n — built to showcase an
