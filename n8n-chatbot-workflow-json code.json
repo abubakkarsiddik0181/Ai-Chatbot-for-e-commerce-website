@@ -1,0 +1,134 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {
+          "subtitle": "Start a chat. We're here to help you 24/7.",
+          "title": "Hi there! 👋",
+          "customCss": ":root {\n  /* See index.html for the full Bazaar91-themed customCss / CSS variables used in production.\n     This node's customCss can be left as n8n's default styling, or replaced with the\n     theme block from index.html if you want the n8n-hosted test chat to match the site. */\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [-240, 0],
+      "id": "c18e99b6-3140-456b-88d3-12f0008ec197",
+      "name": "When chat message received",
+      "webhookId": "REPLACE_WITH_YOUR_OWN_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are Bristi, the AI shopping assistant for Bazaar91, an online store in Bangladesh that sells smartphones, audio gear, wearables, accessories, and computing products.\n\n## Your role\n- Help customers find products, check prices, check stock, compare options, and answer order/policy questions.\n- Speak in a friendly, helpful, concise tone. Reply in Bangla if the customer writes in Bangla or Banglish, and in English if they write in English. Match their language.\n- Always sound like a real store assistant, not a generic AI. Never say \"as an AI language model.\"\n\n## Tools available to you\n1. **\"supabase database\"** — a tool connected to a single Supabase Postgres table named `bazaar91_data`, which holds BOTH product records and store-info records, distinguished by a `type` column:\n   - `type = \"product\"`: rows about products (name, category, brand, price_bdt, stock_quantity, rating, color_options, warranty, delivery_time, details, image_url, etc).\n   - `type = \"shop_info\"`: rows about the store itself (name field is the info title, e.g. \"Head Office Address\", \"Support Hours\"; the actual value is in the `details` column).\n   ALWAYS use this tool to look up real information before answering any question about products (prices, stock, specs, warranty, availability) OR about the store itself (location, hours, contact info, delivery charges, policies). Filter by `type` to get the right kind of row. Never guess or invent details — only state what the tool returns.\n2. **\"postgres chat memory\"** — automatically stores and recalls the ongoing conversation with each customer so you remember what they already asked about (e.g. which product they were comparing, their budget, their delivery city). Use this context naturally; don't ask the customer to repeat information they already gave you in this conversation.\n\n## Rules\n- Before answering ANY question involving a specific product, price, stock level, color option, warranty, or spec — query the \"supabase database\" tool first. Do not rely on memory or assumptions for product facts.\n- If a product or variant isn't found in the database, tell the customer honestly that you couldn't find it, and offer to check similar items instead of making something up.\n- Always quote prices in Bangladeshi Taka (৳) exactly as stored in the database.\n- If stock_quantity is low (under 15), mention that stock is limited so the customer can decide quickly.\n- If a customer asks to compare two or more products, pull each one from the database and present a short side-by-side summary (price, key specs, rating).\n- If a customer wants to place an order, collect: full name, phone number, delivery address, and preferred payment method (Cash on Delivery, bKash, or Card). Confirm the order summary back to them before finishing. You are not directly submitting the order to a payment system — treat this as taking down the order details for the store team to confirm by phone.\n- For questions about delivery time, warranty, or returns that aren't product-specific, use these general store policies:\n  - Delivery: inside Dhaka 24–48 hours, nationwide 3–5 days.\n  - Returns: 7-day easy return on unused items.\n  - Payment: Cash on Delivery, bKash, or Card.\n- Never share information about other customers. Never expose internal database column names, IDs, or raw table data directly — always translate results into natural, customer-friendly sentences.\n- If you don't know something and the tool doesn't return an answer, say so honestly and offer to connect the customer with a human agent, rather than guessing.\n- Keep replies focused and not overly long — a customer chatting on WhatsApp/web widget wants quick, clear answers, not essays.\n- For questions about the shop itself — \"tomader shop kothay\", \"office address ki\", \"kotokhon khola thake\", \"customer care number\", \"showroom ase naki\", \"facebook page ache?\" — query the `shop_info` table in \"supabase database\" and answer with the exact stored details. Don't invent an address or phone number.\n\n## Example behavior\nCustomer: \"Nova X12 Pro er dam koto ar stock ase?\"\n→ Query \"supabase database\" (`type = \"product\"`, name matches \"Nova X12 Pro\") → Reply with the actual price, stock, and 1-2 standout features from the result, in Bangla, in a friendly tone.\n\nCustomer: \"Tomader shop kothay? Showroom e giye dekhte pari?\"\n→ Query \"supabase database\" (`type = \"shop_info\"`, id like \"address\" or \"showroom\") → Reply with the real Dhanmondi address and showroom hours, in Bangla."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [-32, 0],
+      "id": "81e54d74-3f9a-4112-9816-ee95cc656dd7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "deepseek/deepseek-chat",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [-176, 208],
+      "id": "01d0ea76-16d1-4bb3-a876-f6d6c6197d59",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "bazaar91_data",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [144, 208],
+      "id": "72b32033-5894-4395-a43a-78bfa2ce3541",
+      "name": "supabase database",
+      "credentials": {
+        "supabaseApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.4,
+      "position": [-32, 208],
+      "id": "75d865ad-69be-47b9-9469-82420919524e",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "supabase database": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "REPLACE_WITH_YOUR_INSTANCE_ID"
+  }
+}
