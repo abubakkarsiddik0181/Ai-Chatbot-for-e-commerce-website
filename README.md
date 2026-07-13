@@ -11,6 +11,9 @@ and persistent memory, all wired together.
 > **Note:** This is a demo/portfolio project. Products, prices, and business
 > details are fictional and used only to demonstrate the system.
 
+# demo video link 
+https://kommodo.ai/recordings/0wL4d6cyjYOsMj0Or0it?onlyRecording=1
+
 ---
 
 ## Frontend
